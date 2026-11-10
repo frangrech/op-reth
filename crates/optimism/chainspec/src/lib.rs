@@ -511,6 +511,14 @@ mod tests {
 
     use crate::*;
 
+    /// A `prune_delete_limit` of 0 makes the pruner stop before its first segment, so the periodic
+    /// runs would never delete the MDBX copies of data that is already in static files.
+    #[test]
+    fn opbnb_mainnet_prune_delete_limit_is_non_zero() {
+        use reth_chainspec::EthChainSpec;
+        assert!(OPBNB_MAINNET.prune_delete_limit() > 0);
+    }
+
     #[test]
     fn base_mainnet_forkids() {
         let base_mainnet = OpChainSpecBuilder::base_mainnet().build();

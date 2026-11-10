@@ -13,6 +13,8 @@ mod builder;
 mod db_ext;
 mod error;
 mod event;
+#[cfg(test)]
+mod integrity_tests;
 mod metrics;
 mod pruner;
 pub mod segments;

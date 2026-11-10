@@ -29,7 +29,9 @@ pub static OPBNB_MAINNET: Lazy<Arc<OpChainSpec>> = Lazy::new(|| {
             base_fee_params: BaseFeeParamsKind::Variable(
                 vec![(EthereumHardfork::London.boxed(), BaseFeeParams::ethereum())].into(),
             ),
-            prune_delete_limit: 0,
+            // Must be non-zero: with a limit of 0 the pruner stops before its first segment, so
+            // the periodic runs never delete the MDBX copies of data already in static files.
+            prune_delete_limit: 10000,
             ..Default::default()
         },
     }

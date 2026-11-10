@@ -2587,7 +2587,12 @@ where
         //    client software MUST respond with -38003: `Invalid payload attributes` and MUST NOT
         //    begin a payload build process. In such an event, the forkchoiceState update MUST NOT
         //    be rolled back.
-        if attrs.timestamp() <= head.timestamp {
+        //
+        // opBNB: block times are sub-second (250ms) while header/attribute timestamps are in whole
+        // seconds (the millisecond part lives in prev_randao), so several consecutive blocks share
+        // the same second. Only reject attributes that are strictly in the past, consistent with
+        // `validate_against_parent_timestamp`.
+        if attrs.timestamp() < head.timestamp {
             return OnForkChoiceUpdated::invalid_payload_attributes()
         }
 
